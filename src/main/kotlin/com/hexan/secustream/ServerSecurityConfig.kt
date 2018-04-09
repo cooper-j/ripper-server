@@ -69,7 +69,7 @@ class ServerSecurityConfig : WebSecurityConfigurerAdapter() {
 
     @Bean
     fun tokenStore(): TokenStore {
-        return JdbcTokenStore(dataSource)
+        return InMemoryTokenStore()
     }
 
     @Bean

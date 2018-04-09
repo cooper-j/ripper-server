@@ -18,23 +18,6 @@ import org.springframework.security.oauth2.provider.token.TokenStore
 @EnableResourceServer
 class ResourceServerConfig : ResourceServerConfigurerAdapter() {
 
-    @Value("\${spring.datasource.driverClassName}")
-    private val oauthClass: String? = null
-
-    @Value("\${spring.datasource.url}")
-    private val oauthUrl: String? = null
-
-    @Bean
-    fun tokenStore(): TokenStore {
-        val tokenDataSource = DataSourceBuilder.create()
-                .driverClassName(oauthClass)
-                .username("root")
-                .password("")
-                .url(oauthUrl)
-                .build()
-        return JdbcTokenStore(tokenDataSource)
-    }
-
     @Throws(Exception::class)
     override fun configure(http: HttpSecurity)  {
         //-- define URL patterns to enable OAuth2 security
