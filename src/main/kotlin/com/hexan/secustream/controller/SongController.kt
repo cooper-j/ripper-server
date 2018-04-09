@@ -5,10 +5,10 @@ import com.hexan.secustream.model.NewSong
 import com.hexan.secustream.model.Song
 import com.hexan.secustream.repo.AlbumRepository
 import com.hexan.secustream.repo.ArtistRepository
+import com.hexan.secustream.repo.GenreRepository
 import com.hexan.secustream.repo.SongRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
-import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.util.StringUtils
 import org.springframework.web.bind.annotation.*
 import java.time.Instant
@@ -18,6 +18,8 @@ class SongController {
 
     @Autowired
     lateinit var songRepository: SongRepository
+    @Autowired
+    lateinit var genreRepository: GenreRepository
     @Autowired
     lateinit var albumRepository: AlbumRepository
     @Autowired
@@ -31,6 +33,9 @@ class SongController {
             if (!artistEntity.isPresent)
                 return "Error: No artist for id " + newSong.artistId
 
+            if (songRepository.findByName(newSong.name).isPresent)
+                return "Error: A song with this name already exists"
+
             var album : Album? = null
             if (!StringUtils.isEmpty(newSong.albumId)) {
                 val albumEntity = albumRepository.findById(newSong.albumId!!)
@@ -39,7 +44,7 @@ class SongController {
                 album = albumEntity.get()
             }
 
-            val song = Song(newSong.name, artistEntity.get(), newSong.mediaUrl, album, HashSet(), Instant.now())
+            val song = Song(newSong.name, artistEntity.get(), newSong.mediaUrl, album, HashSet(), genreRepository.findAllById(newSong.genres), Instant.now())
 
             val save = songRepository.save(song)
             return "{\"id\":" + save.id +"}"

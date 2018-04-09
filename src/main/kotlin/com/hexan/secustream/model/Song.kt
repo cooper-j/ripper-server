@@ -21,12 +21,14 @@ class Song(
         @ManyToMany(mappedBy = "songs")
         @JsonIgnore
         val playlists: MutableSet<Playlist>,
+        @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
+        val genres: MutableList<Genre>?,
         @JsonIgnore
         val created: Instant,
         @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
         val id: Long = -1) {
 
-    constructor() : this("", Artist(), "", null, HashSet(), Instant.now())
+    constructor() : this("", Artist(), "", null, HashSet(), ArrayList(), Instant.now())
 
 
     companion object {
@@ -37,4 +39,5 @@ class Song(
 data class NewSong @JsonCreator constructor(val name: String,
                                             val artistId: Long,
                                             val mediaUrl: String = "",
-                                            val albumId: Long? = null)
+                                            val albumId: Long? = null,
+                                            val genres: Iterable<Long>)
