@@ -37,7 +37,7 @@ class SignupService {
         //-- just to make sure there is an ADMIN user exist in the database for testing purpose
         if (userRepository.count() == 0L) {
             userRepository.save(User("admin",
-                    passwordEncoder!!.encode("adminpass"),
+                    passwordEncoder.encode("adminpass"),
                     null,
                     true, hashSetOf(UserRole("USER"), UserRole("ADMIN"))))
         }

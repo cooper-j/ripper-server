@@ -27,15 +27,15 @@ class GenreController {
         return "Error"
     }
 
-    @RequestMapping("/song/findall")
+    @RequestMapping("/genre/findall")
     @ResponseStatus(value = HttpStatus.OK)
     fun findAll() = genreRepository.findAll()
 
-    @RequestMapping("/song/{id}")
+    @RequestMapping("/genre/{id}")
     @ResponseStatus(value = HttpStatus.OK)
     fun findById(@PathVariable id: Long) = genreRepository.findById(id)
 
-    @RequestMapping("/song/findbysongname/{name}")
+    @RequestMapping("/genre/findbygenrename/{name}")
     @ResponseStatus(value = HttpStatus.OK)
     fun findBySongName(@PathVariable name: String) = genreRepository.findByName(name)
 
