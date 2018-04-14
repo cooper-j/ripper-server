@@ -7,6 +7,9 @@ import javax.persistence.*
 @Entity
 @Table(name = "songs")
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator::class,
+                property = "id")
 class Song(
         val name: String,
         @ManyToOne(optional = true, cascade = [CascadeType.ALL])
@@ -19,7 +22,6 @@ class Song(
         @JsonBackReference("album-song")
         var album: Album? = null,
         @ManyToMany(mappedBy = "songs")
-        @JsonIgnore
         val playlists: MutableSet<Playlist>,
         @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
         val genres: MutableList<Genre>?,

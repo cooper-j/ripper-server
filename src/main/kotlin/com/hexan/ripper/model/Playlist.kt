@@ -7,6 +7,9 @@ import javax.persistence.*
 @Entity
 @Table(name = "playlists")
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator::class,
+                property = "id")
 class Playlist(val name: String,
                @ManyToOne(optional = true, cascade = [CascadeType.ALL])
                @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = true)
