@@ -20,7 +20,7 @@ class Playlist(val name: String,
                @JoinTable(name = "playlist_song",
                        joinColumns =  [JoinColumn(name = "playlist_id")] ,
                        inverseJoinColumns = [JoinColumn(name = "song_id")])
-               @JsonIgnoreProperties("playlists", "album", "artist")
+               @JsonIgnoreProperties("playlists", "artist")
                val songs: MutableList<Song>,
                @JsonIgnore
                val created: Instant,

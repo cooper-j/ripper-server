@@ -16,7 +16,7 @@ class Song(
         val mediaUrl: String,
         @ManyToOne(optional = true, cascade = [CascadeType.ALL])
         @JoinColumn(name = "album_id", referencedColumnName = "id", nullable = true)
-        @JsonIgnoreProperties("songs")
+        @JsonIgnoreProperties("songs", "artist")
         var album: Album,
         @ManyToMany(mappedBy = "songs")
         val playlists: MutableSet<Playlist>,
