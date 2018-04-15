@@ -13,12 +13,14 @@ import javax.persistence.*
 class Playlist(val name: String,
                @ManyToOne(optional = true, cascade = [CascadeType.ALL])
                @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = true)
+               @JsonIgnoreProperties("playlists")
                val user: User,
                @ElementCollection
                @ManyToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
                @JoinTable(name = "playlist_song",
                        joinColumns =  [JoinColumn(name = "playlist_id")] ,
                        inverseJoinColumns = [JoinColumn(name = "song_id")])
+               @JsonIgnoreProperties("playlists", "album", "artist")
                val songs: MutableList<Song>,
                @JsonIgnore
                val created: Instant,

@@ -22,9 +22,11 @@ class User(@Column(name = "username", nullable = false, unique = true)
            var playlists: MutableList<Playlist>? = ArrayList(),
 
            @Column(name = "enabled", nullable = false)
+           @JsonIgnore
            val isEnabled: Boolean = false,
 
            @OneToMany(fetch = FetchType.EAGER, cascade = [(CascadeType.ALL)])
+           @JsonIgnore
            val roles: MutableSet<UserRole>,
 
            @Id
@@ -34,7 +36,7 @@ class User(@Column(name = "username", nullable = false, unique = true)
     constructor() : this("", "", null, true, HashSet<UserRole>())
 
     companion object {
-        private val serialVersionUID = 1L
+        private const val serialVersionUID = 1L
     }
 }
 

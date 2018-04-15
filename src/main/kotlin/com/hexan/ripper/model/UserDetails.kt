@@ -6,7 +6,7 @@ import java.util.ArrayList
 import org.springframework.security.core.userdetails.UserDetails
 
 
-class UserDetails(var user: User) : UserDetails {
+class UserDetails (var user: User) : UserDetails {
     private val authorities: Collection<GrantedAuthority>
     private val password: String? = user.password
     private val username: String? = user.username
@@ -56,7 +56,7 @@ class UserDetails(var user: User) : UserDetails {
     }
 
     companion object {
-        private val serialVersionUID = 1L
+        private const val serialVersionUID = 1L
     }
 
 }

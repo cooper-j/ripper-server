@@ -7,17 +7,16 @@ import javax.persistence.*
 @Entity
 @Table(name = "songs")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator::class,
-        property = "id")
 class Song(
         val name: String,
         @ManyToOne(optional = true, cascade = [CascadeType.ALL])
         @JoinColumn(name = "artist_id", referencedColumnName = "id", nullable = true)
+        @JsonIgnoreProperties("songs")
         val artist: Artist,
         val mediaUrl: String,
         @ManyToOne(optional = true, cascade = [CascadeType.ALL])
         @JoinColumn(name = "album_id", referencedColumnName = "id", nullable = true)
+        @JsonIgnoreProperties("songs")
         var album: Album,
         @ManyToMany(mappedBy = "songs")
         val playlists: MutableSet<Playlist>,

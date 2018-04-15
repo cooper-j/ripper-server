@@ -33,10 +33,6 @@ class ServerSecurityConfig : WebSecurityConfigurerAdapter() {
     @Autowired
     lateinit var userDetailsService: UserDetailsService
 
-
-    @Autowired
-    lateinit var dataSource: DataSource
-
     @Throws(Exception::class)
     override fun configure(auth: AuthenticationManagerBuilder) {
         auth.userDetailsService<UserDetailsService>(userDetailsService)
@@ -92,7 +88,7 @@ class ServerSecurityConfig : WebSecurityConfigurerAdapter() {
     }
 
     @Bean
-    fun passwordEncoder(): PasswordEncoder {
+    fun passwordEncoder(): BCryptPasswordEncoder {
         return BCryptPasswordEncoder()
     }
 }

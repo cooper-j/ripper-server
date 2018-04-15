@@ -46,6 +46,10 @@ class UserController {
     @RequestMapping("/signup", method = [(RequestMethod.POST)])
     fun signup(@RequestBody newUser: NewUser): ResponseEntity<*> {
 
+        if (userRepository.findByUsername(newUser.username).isPresent)
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("Username taken")
         val user = User(newUser.username, newUser.password, null, true,  hashSetOf(UserRole("USER")))
         signupService.addUser(user)
         return ResponseEntity<Any>(HttpStatus.CREATED)

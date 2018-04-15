@@ -7,16 +7,15 @@ import javax.persistence.*
 @Entity
 @Table(name = "artists")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator::class,
-        property = "id")
 class Artist(val name: String,
              var profileUrl: String?,
              @ElementCollection
              @OneToMany(fetch = FetchType.LAZY, mappedBy = "artist", cascade = [CascadeType.ALL])
+             @JsonIgnoreProperties("artist")
              var albums: MutableList<Album>?,
              @ElementCollection
              @OneToMany(fetch = FetchType.LAZY, mappedBy = "artist", cascade = [CascadeType.ALL])
+             @JsonIgnoreProperties("artist")
              var songs: MutableList<Song>?,
              @JsonIgnore
              val created: Instant = Instant.now(),
