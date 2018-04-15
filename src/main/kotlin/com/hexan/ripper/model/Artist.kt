@@ -7,16 +7,16 @@ import javax.persistence.*
 @Entity
 @Table(name = "artists")
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator::class,
+        property = "id")
 class Artist(val name: String,
              var profileUrl: String?,
              @ElementCollection
              @OneToMany(fetch = FetchType.LAZY, mappedBy = "artist", cascade = [CascadeType.ALL])
-             @JsonManagedReference("album-artists")
              var albums: MutableList<Album>?,
              @ElementCollection
              @OneToMany(fetch = FetchType.LAZY, mappedBy = "artist", cascade = [CascadeType.ALL])
-             @JsonManagedReference("song-artists")
-             @JsonIgnore
              var songs: MutableList<Song>?,
              @JsonIgnore
              val created: Instant = Instant.now(),
@@ -28,6 +28,8 @@ class Artist(val name: String,
     companion object {
         private val serialVersionUID = 1L
     }
+
+    constructor(newArtist: NewArtist) : this(newArtist.name, newArtist.profileUrl, null, null)
 }
 
-data class NewArtist @JsonCreator constructor(val name: String)
+data class NewArtist @JsonCreator constructor(val name: String, var profileUrl: String?)

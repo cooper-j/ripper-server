@@ -9,18 +9,16 @@ import javax.persistence.*
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator::class,
-                property = "id")
+        property = "id")
 class Song(
         val name: String,
         @ManyToOne(optional = true, cascade = [CascadeType.ALL])
         @JoinColumn(name = "artist_id", referencedColumnName = "id", nullable = true)
-        @JsonBackReference("artist-song")
         val artist: Artist,
         val mediaUrl: String,
         @ManyToOne(optional = true, cascade = [CascadeType.ALL])
         @JoinColumn(name = "album_id", referencedColumnName = "id", nullable = true)
-        @JsonBackReference("album-song")
-        var album: Album? = null,
+        var album: Album,
         @ManyToMany(mappedBy = "songs")
         val playlists: MutableSet<Playlist>,
         @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
@@ -30,7 +28,7 @@ class Song(
         @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
         val id: Long = -1) {
 
-    constructor() : this("", Artist(), "", null, HashSet(), ArrayList(), Instant.now())
+    constructor() : this("", Artist(), "", Album(), HashSet(), ArrayList(), Instant.now())
 
 
     companion object {

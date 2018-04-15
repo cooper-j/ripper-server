@@ -13,7 +13,6 @@ import javax.persistence.*
 class Playlist(val name: String,
                @ManyToOne(optional = true, cascade = [CascadeType.ALL])
                @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = true)
-               @JsonBackReference("user-playlist")
                val user: User,
                @ElementCollection
                @ManyToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])

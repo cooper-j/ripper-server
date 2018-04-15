@@ -36,18 +36,16 @@ class SongController {
             if (songRepository.findByName(newSong.name).isPresent)
                 return "Error: A song with this name already exists"
 
-            var album : Album? = null
             if (!StringUtils.isEmpty(newSong.albumId)) {
                 val albumEntity = albumRepository.findById(newSong.albumId!!)
                         if (!albumEntity.isPresent)
                             return "Error: No album for id " + newSong.albumId
-                album = albumEntity.get()
-            }
+                val song = Song(newSong.name, artistEntity.get(), newSong.mediaUrl, albumEntity.get(), HashSet(), genreRepository.findAllById(newSong.genres), Instant.now())
 
-            val song = Song(newSong.name, artistEntity.get(), newSong.mediaUrl, album, HashSet(), genreRepository.findAllById(newSong.genres), Instant.now())
-
-            val save = songRepository.save(song)
-            return "{\"id\":" + save.id +"}"
+                val save = songRepository.save(song)
+                return "{\"id\":" + save.id +"}"
+            } else
+                return "Error albumId is mandatory"
         }
         return "Error"
     }

@@ -1,6 +1,7 @@
 package com.hexan.ripper.controller
 
 import com.hexan.ripper.model.Artist
+import com.hexan.ripper.model.NewArtist
 import com.hexan.ripper.repo.AlbumRepository
 import com.hexan.ripper.repo.ArtistRepository
 import com.hexan.ripper.repo.SongRepository
@@ -21,19 +22,19 @@ class ArtistController {
 
     @RequestMapping("/artist", method = [(RequestMethod.POST)])
     @ResponseStatus(value = HttpStatus.CREATED)
-    fun createArtist(@RequestBody artist: Artist): String {
+    fun createArtist(@RequestBody newArtist: NewArtist): String {
 
-        if (StringUtils.isEmpty(artist.name)) {
+        if (StringUtils.isEmpty(newArtist.name)) {
             return "Error: Artist name cannot be empty"
         }
-        if (artistRepository.existsByName(artist.name)) {
+        if (artistRepository.existsByName(newArtist.name)) {
             return "Artist already exists with that name"
         }
 
-        if (artist.profileUrl.isNullOrBlank())
-            artist.profileUrl = "https://s3.eu-west-3.amazonaws.com/storage-hexan/artist-image/default_artist_image.jpg"
+        if (newArtist.profileUrl.isNullOrBlank())
+            newArtist.profileUrl = "https://s3.eu-west-3.amazonaws.com/storage-hexan/artist-image/default_artist_image.jpg"
 
-        val save = artistRepository.save(artist)
+        val save = artistRepository.save(Artist(newArtist))
         return "{\"id\":" + save.id + "}"
     }
 
