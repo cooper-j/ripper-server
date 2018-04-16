@@ -64,6 +64,19 @@ class PlayListController {
         return "Error"
     }
 
+    @RequestMapping("/playlist/{id}/songs", method = [(RequestMethod.GET)])
+    @ResponseStatus(value = HttpStatus.OK)
+    fun getPlaylistSongs(@PathVariable id: Long): ResponseEntity<String> {
+        val playlistEntity = playlistRepository.findById(id)
+        if (!playlistEntity.isPresent)
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("Playlist does not exist")
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ObjectMapper().writeValueAsString(playlistEntity.get().songs))
+    }
+
     @RequestMapping("/playlist/findall")
     @ResponseStatus(value = HttpStatus.OK)
     fun findAll() = playlistRepository.findAll(Sort(Sort.Direction.ASC, "created"))
