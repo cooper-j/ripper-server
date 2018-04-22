@@ -13,7 +13,7 @@ class Song(
         @JoinColumn(name = "artist_id", referencedColumnName = "id", nullable = true)
         @JsonIgnoreProperties("songs", "albums")
         val artist: Artist,
-        val mediaUrl: String,
+        var mediaUrl: String,
         @ManyToOne(optional = true, cascade = [CascadeType.ALL])
         @JoinColumn(name = "album_id", referencedColumnName = "id", nullable = true)
         @JsonIgnoreProperties("songs", "artist")
@@ -23,13 +23,13 @@ class Song(
         val playlists: MutableSet<Playlist>,
         @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
         val genres: MutableList<Genre>?,
+        var processing: Boolean,
         @JsonIgnore
         val created: Instant,
         @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
         val id: Long = -1) {
 
-    constructor() : this("", Artist(), "", Album(), HashSet(), ArrayList(), Instant.now())
-
+    constructor() : this("", Artist(), "", Album(), HashSet(), ArrayList(), true, Instant.now())
 
     companion object {
         private val serialVersionUID = 1L

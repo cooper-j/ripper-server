@@ -1,12 +1,12 @@
 package com.hexan.ripper.controller
 
-import com.hexan.ripper.model.Album
 import com.hexan.ripper.model.NewSong
 import com.hexan.ripper.model.Song
 import com.hexan.ripper.repo.AlbumRepository
 import com.hexan.ripper.repo.ArtistRepository
 import com.hexan.ripper.repo.GenreRepository
 import com.hexan.ripper.repo.SongRepository
+import com.hexan.ripper.service.MediaProcessService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.util.StringUtils
@@ -25,6 +25,9 @@ class SongController {
     @Autowired
     lateinit var artistRepository: ArtistRepository
 
+    @Autowired
+    lateinit var mediaProcessService: MediaProcessService
+
     @RequestMapping("/song", method = [(RequestMethod.POST)])
     @ResponseStatus(value = HttpStatus.CREATED)
     fun createSong(@RequestBody newSong: NewSong): String {
@@ -40,7 +43,9 @@ class SongController {
                 val albumEntity = albumRepository.findById(newSong.albumId!!)
                         if (!albumEntity.isPresent)
                             return "Error: No album for id " + newSong.albumId
-                val song = Song(newSong.name, artistEntity.get(), newSong.mediaUrl, albumEntity.get(), HashSet(), genreRepository.findAllById(newSong.genres), Instant.now())
+                val song = Song(newSong.name, artistEntity.get(), newSong.mediaUrl, albumEntity.get(), HashSet(), genreRepository.findAllById(newSong.genres), true, Instant.now())
+
+                mediaProcessService.executeAsynchronously(song)
 
                 val save = songRepository.save(song)
                 return "{\"id\":" + save.id +"}"
